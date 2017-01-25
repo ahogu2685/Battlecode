@@ -258,21 +258,21 @@ public strictfp class RobotPlayer
 
     public static void setupGardener() throws GameActionException
     {
-    	MapLocation onMapX = rc.getLocation(); 
-    	MapLocation onMapY = rc.getLocation();
-    	while(!rc.onTheMap(onMapX) && !rc.onTheMap(onMapY)) {
-	        try
-	        {
-	        	forwardish(rc.getInitialArchonLocations(rc.getTeam())[0].directionTo(rc.getInitialArchonLocations(rc.getTeam())[0]));
-	        	onMapX = new MapLocation(rc.getLocation().x + 6, rc.getLocation().y);
-	        	onMapY = new MapLocation(rc.getLocation().x, rc.getLocation().y + 6);
-	        }
-	        catch (Exception e)
-	        {
-	            System.out.println("findDirection Exception");
-	            e.printStackTrace();
-	        }
-    	}
+        try
+        {
+            MapLocation myLocation = new MapLocation(Math.round(rc.getLocation().x), Math.round(rc.getLocation().y));
+            MapLocation newPlaceToSetup = new MapLocation((float)((double)(rc.readBroadcast(0) + 6)), (rc.readBroadcast(1)));
+            while (!(myLocation.equals(newPlaceToSetup)))
+            {
+                forwardish(rc.getLocation().directionTo(newPlaceToSetup));
+                myLocation = new MapLocation(Math.round(rc.getLocation().x), Math.round(rc.getLocation().y));
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println("findDirection Exception");
+            e.printStackTrace();
+        }
     }
 
     public static void scoutGardener() throws GameActionException
@@ -346,6 +346,7 @@ public strictfp class RobotPlayer
             }
         }
     }
+
 
     public static void findWaterDirection() throws GameActionException
     {
